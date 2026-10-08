@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+<title>Phytosanitary Certificate Search</title>
+<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&family=Roboto+Mono&display=swap" rel="stylesheet">
+<style>
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+html, body {
+  min-height: 100%;
+  font-family: Roboto, -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif;
+  color: #222;
+}
+body {
+  background: #093c1b url('bg.jpg') no-repeat center top fixed;
+  background-size: cover;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 0 0 40px;
+}
+.header {
+  width: 100%;
+  max-width: 580px;
+  padding: 38px 24px 24px;
+  display: flex;
+  align-items: center;
+  gap: 22px;
+}
+.logo-box {
+  width: 135px;
+  height: 135px;
+  flex-shrink: 0;
+  border-radius: 50%;
+  background: #fff;
+  border: 4px solid rgba(255, 255, 255, 0.9);
+  box-shadow: 0 2px 10px rgba(0,0,0,0.35);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+.logo-box img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.header-text {
+  color: #fff;
+  text-shadow: 0 2px 6px rgba(0,0,0,0.7);
+}
+.brand-fa {
+  font-size: 26px;
+  font-weight: 700;
+  line-height: 1.25;
+  margin-bottom: 8px;
+  direction: rtl;
+  text-align: left;
+}
+.brand-en {
+  font-size: 25px;
+  font-weight: 700;
+  line-height: 1.18;
+}
+.card {
+  width: calc(100% - 36px);
+  max-width: 540px;
+  background: #f4f4f4;
+  border-radius: 8px;
+  box-shadow: 0 4px 18px rgba(0,0,0,0.3);
+  overflow: hidden;
+}
+.card-body {
+  padding: 38px 36px 32px;
+}
+h1 {
+  font-size: 38px;
+  line-height: 1.15;
+  color: #262626;
+  font-weight: 700;
+  letter-spacing: -0.5px;
+  margin-bottom: 40px;
+}
+.form-group {
+  margin-bottom: 26px;
+}
+label {
+  display: block;
+  font-size: 24px;
+  font-weight: 500;
+  color: #222;
+  margin-bottom: 8px;
+}
+input, select {
+  width: 100%;
+  height: 56px;
+  border: 2px solid #cecece;
+  border-radius: 6px;
+  background: #fff;
+  padding: 0 16px;
+  font-size: 22px;
+  color: #333;
+  font-family: inherit;
+  outline: none;
+  transition: border-color 0.2s;
+}
+input:focus, select:focus {
+  border-color: #55b756;
+}
+select {
+  cursor: pointer;
+  appearance: auto;
+}
+.btn-search {
+  width: 100%;
+  height: 60px;
+  border: 0;
+  border-radius: 6px;
+  background: #56b856;
+  color: #fff;
+  font-size: 24px;
+  font-weight: 600;
+  font-family: inherit;
+  cursor: pointer;
+  margin-top: 10px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+  transition: background 0.2s;
+}
+.btn-search:hover {
+  background: #4ca34c;
+}
+.result-box {
+  border-top: 2px solid #8e8e8e;
+  padding: 28px 36px 36px;
+  background: #f4f4f4;
+  font-family: "Roboto Mono", monospace;
+  font-size: 20px;
+  color: #222;
+  min-height: 80px;
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+}
+.result-box a {
+  color: #0000ee;
+  text-decoration: underline;
+  cursor: pointer;
+  margin-left: 6px;
+}
+.result-box a:hover {
+  color: #0000aa;
+}
+.nav-admin {
+  margin-top: 24px;
+  text-align: center;
+}
+.nav-admin a {
+  color: rgba(255,255,255,0.7);
+  font-size: 14px;
+  text-decoration: none;
+}
+.nav-admin a:hover {
+  color: #fff;
+  text-decoration: underline;
+}
+@media (max-width: 480px) {
+  .header {
+    padding: 28px 18px 20px;
+    gap: 16px;
+  }
+  .logo-box {
+    width: 110px;
+    height: 110px;
+  }
+  .brand-fa {
+    font-size: 22px;
+    margin-bottom: 6px;
+  }
+  .brand-en {
+    font-size: 21px;
+  }
+  .card {
+    width: calc(100% - 24px);
+  }
+  .card-body {
+    padding: 28px 22px 24px;
+  }
+  h1 {
+    font-size: 32px;
+    margin-bottom: 30px;
+  }
+  label {
+    font-size: 21px;
+  }
+  input, select {
+    height: 50px;
+    font-size: 19px;
+  }
+  .btn-search {
+    height: 54px;
+    font-size: 22px;
+  }
+  .result-box {
+    padding: 22px;
+    font-size: 18px;
+  }
+}
+</style>
+</head>
+<body>
+
+<header class="header">
+  <div class="logo-box">
+    <img src="logo.png" alt="سازمان حفظ نباتات کشور">
+  </div>
+  <div class="header-text">
+    <div class="brand-fa">سازمان حفظ نباتات کشور</div>
+    <div class="brand-en">Plant Protection<br>Organization</div>
+  </div>
+</header>
+
+<main class="card">
+  <section class="card-body">
+    <h1>Phytosanitary<br>Certificate Search</h1>
+
+    <div class="form-group">
+      <label for="date">Date</label>
+      <input type="text" id="date" value="09/06/2026" placeholder="DD/MM/YYYY">
+    </div>
+
+    <div class="form-group">
+      <label for="place">Place of Issue</label>
+      <select id="place">
+        <option value="Alborz" >Alborz</option>
+        <option value="Ardabil" >Ardabil</option>
+        <option value="Bushehr" >Bushehr</option>
+        <option value="Chaharmahal and Bakhtiari" >Chaharmahal and Bakhtiari</option>
+        <option value="East Azerbaijan" >East Azerbaijan</option>
+        <option value="Fars" >Fars</option>
+        <option value="Gilan" >Gilan</option>
+        <option value="Golestan" >Golestan</option>
+        <option value="Hamadan" >Hamadan</option>
+        <option value="Hormozgan" >Hormozgan</option>
+        <option value="Ilam" >Ilam</option>
+        <option value="Isfahan" >Isfahan</option>
+        <option value="Kerman" >Kerman</option>
+        <option value="Kermanshah" >Kermanshah</option>
+        <option value="Khuzestan" >Khuzestan</option>
+        <option value="Kohgiluyeh and Boyer-Ahmad" >Kohgiluyeh and Boyer-Ahmad</option>
+        <option value="Kurdistan" >Kurdistan</option>
+        <option value="Lorestan" >Lorestan</option>
+        <option value="Markazi" >Markazi</option>
+        <option value="Mazandaran" >Mazandaran</option>
+        <option value="North Khorasan" >North Khorasan</option>
+        <option value="Qazvin" >Qazvin</option>
+        <option value="Qom" >Qom</option>
+        <option value="Razavi Khorasan" >Razavi Khorasan</option>
+        <option value="Semnan" >Semnan</option>
+        <option value="Sistan and Baluchestan" selected>Sistan and Baluchestan</option>
+        <option value="South Khorasan" >South Khorasan</option>
+        <option value="Tehran" >Tehran</option>
+        <option value="West Azerbaijan" >West Azerbaijan</option>
+        <option value="Yazd" >Yazd</option>
+        <option value="Zanjan" >Zanjan</option>
+      </select>
+    </div>
+
+    <div class="form-group">
+      <label for="serial">Serial No</label>
+      <input type="text" id="serial" value="053554502" inputmode="numeric" placeholder="Enter Serial No">
+    </div>
+
+    <button type="button" class="btn-search" onclick="searchCertificate()">Search</button>
+  </section>
+
+  <section class="result-box" id="result">
+    Certificate exists. <a onclick="viewDocument()">(view document)</a>
+  </section>
+</main>
+
+<div class="nav-admin">
+  <a href="admin.html">پنل مدیریت گواهی‌ها (Admin Panel)</a>
+</div>
+
+<script>
+const KEY = "phyto_demo_records_v2";
+
+const defaultRecords = [
+  {
+    serial: "053554502",
+    date: "09/06/2026",
+    place: "Sistan and Baluchestan",
+    exporter: "Persian Gulf Export Co.",
+    importer: "Global Agri Trade Ltd.",
+    commodity: "Fresh Apples (Malus domestica)",
+    quantity: "24,500",
+    unit: "KG (Kilograms)",
+    origin: "Iran (Islamic Republic of)",
+    destination: "India",
+    transport: "Maritime / Sea Freight",
+    treatment: "Cold Treatment at 0°C for 14 days",
+    officer: "M. Hosseini (Senior Quarantine Officer)",
+    status: "APPROVED & ISSUED",
+    botanicalName: "Malus domestica",
+    distinguishingMarks: "Batch #EXP-2026-908"
+  }
+];
+
+function getRecords() {
+  // The site is static: always retain a working demo record even when storage is
+  // empty, blocked (for example in some file:// contexts), or contains old data.
+  let stored = [];
+  try {
+    const raw = localStorage.getItem(KEY);
+    const parsed = raw ? JSON.parse(raw) : [];
+    if (Array.isArray(parsed)) stored = parsed;
+  } catch (e) { /* localStorage may be unavailable; use built-in data */ }
+  const records = [...defaultRecords];
+  for (const item of stored) {
+    if (!item || !item.serial) continue;
+    const i = records.findIndex(r => String(r.serial) === String(item.serial));
+    if (i >= 0) records[i] = { ...records[i], ...item };
+    else records.push(item);
+  }
+  try { localStorage.setItem(KEY, JSON.stringify(records)); } catch (e) { /* read-only fallback */ }
+  return records;
+}
+
+function searchCertificate() {
+  const serial = document.getElementById("serial").value.trim();
+  const date = document.getElementById("date").value.trim();
+  const place = document.getElementById("place").value.trim();
+
+  const records = getRecords();
+  const found = records.find(r => r.serial === serial);
+
+  const res = document.getElementById("result");
+  if (found) {
+    res.innerHTML = `Certificate exists. <a onclick="viewDocument('${found.serial}')">(view document)</a>`;
+    res.style.color = "#222";
+  } else {
+    res.innerHTML = `<span style="color:#b30000;">No certificate found for Serial No: ${serial || "empty"}</span>`;
+  }
+}
+
+function viewDocument(optSerial) {
+  const serial = optSerial || document.getElementById("serial").value.trim() || "053554502";
+  location.href = "document.html?sn=" + encodeURIComponent(serial);
+}
+
+// Initialize safely; the page and built-in certificate work even if storage is blocked.
+getRecords();
+</script>
+</body>
+</html>
