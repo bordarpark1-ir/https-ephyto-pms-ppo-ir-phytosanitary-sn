@@ -1,1 +1,31 @@
-<!doctype html><html lang="fa" dir="rtl"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>سند گواهی</title><style>*{box-sizing:border-box}html,body{margin:0;min-height:100%;background:#525659}body{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:16px}.frame{max-width:1000px;width:100%;background:white;box-shadow:0 4px 18px #0007}.frame img{display:block;width:100%;height:auto}.empty{padding:36px;text-align:center;font-family:Tahoma,Arial,sans-serif;color:#555}</style></head><body><main class="frame" id="frame"></main><script>const KEY='phyto_demo_records_v2';const sn=new URLSearchParams(location.search).get('sn');let a=[];try{a=JSON.parse(localStorage.getItem(KEY)||'[]')}catch(e){}const rec=a.find(x=>x.serial===sn);const frame=document.getElementById('frame');if(rec&&rec.image){const img=document.createElement('img');img.src=rec.image;img.alt='سند گواهی';frame.appendChild(img)}else{const d=document.createElement('div');d.className='empty';d.textContent=sn?'برای این گواهی تصویری ثبت نشده است.':'شماره سریال مشخص نیست.';frame.appendChild(d)}</script></body></html>
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Phytosanitary Certificate</title>
+<style>
+*{box-sizing:border-box}body{margin:0;background:#eef1ed;color:#202820;font-family:Georgia,"Times New Roman",serif}.toolbar{max-width:1000px;margin:18px auto 12px;padding:0 16px;display:flex;gap:10px;justify-content:flex-end;font-family:Arial,sans-serif}.toolbar button{border:0;border-radius:6px;background:#267b42;color:#fff;padding:10px 18px;font-size:15px;cursor:pointer}.toolbar .back{background:#586a60}.page{width:min(1000px,calc(100% - 32px));min-height:680px;margin:0 auto 30px;padding:44px 56px;background:#fff;border:1px solid #c5d0c4;box-shadow:0 4px 18px #0002;position:relative}.page:before{content:"";position:absolute;inset:14px;border:2px solid #55815c;pointer-events:none}.masthead{text-align:center;position:relative;padding-bottom:24px;border-bottom:2px solid #55815c}.masthead img{width:86px;height:86px;object-fit:contain}.fa{font-family:Tahoma,Arial,sans-serif;font-size:18px;font-weight:bold;direction:rtl}.en{font-family:Arial,sans-serif;font-size:14px;color:#4c5f50;margin-top:6px}.title{text-align:center;font-family:Arial,sans-serif;font-size:25px;letter-spacing:1px;font-weight:bold;margin:30px 0 10px;color:#285d35}.subtitle{text-align:center;font-family:Arial,sans-serif;font-size:15px;color:#555;margin-bottom:30px}.details{font-family:Arial,sans-serif;font-size:17px;line-height:1.9;margin:0 auto;max-width:740px}.row{display:grid;grid-template-columns:210px 1fr;border-bottom:1px solid #dce3dc;padding:10px 0}.label{font-weight:bold;color:#3e5744}.value{overflow-wrap:anywhere}.seal{margin:38px 0 0 auto;width:150px;height:150px;border:2px solid #5e8b64;border-radius:50%;display:flex;align-items:center;justify-content:center;text-align:center;color:#4d7d54;font-family:Arial,sans-serif;font-size:14px;line-height:1.5;transform:rotate(-10deg)}.notfound{text-align:center;padding:50px;color:#a22;font-family:Arial,sans-serif}.uploaded{display:block;width:100%;height:auto;object-fit:contain}.error{font:16px Arial,sans-serif;text-align:center;padding:50px;color:#a22}@media(max-width:600px){.page{padding:32px 24px;min-height:600px}.row{grid-template-columns:1fr;gap:3px}.title{font-size:20px}.toolbar{justify-content:center}}@media print{body{background:#fff}.toolbar{display:none}.page{width:100%;margin:0;border:0;box-shadow:none;min-height:100vh}.page:before{inset:14px}}
+</style>
+</head>
+<body>
+<div class="toolbar"><button class="back" onclick="history.length>1?history.back():location.href='index.html'">Back</button><button onclick="window.print()">Print</button></div>
+<main class="page" id="content"><div class="error">Loading certificate…</div></main>
+<script>
+const KEY = "phyto_demo_records_v2";
+const demo = {serial:"053554502",date:"2026-06-09",place:"Sistan and Baluchestan",exporter:"Persian Gulf Export Co.",importer:"Global Agri Trade Ltd.",commodity:"Fresh Apples (Malus domestica)",quantity:"24,500 KG",origin:"Iran (Islamic Republic of)",destination:"India",status:"APPROVED & ISSUED"};
+function esc(v){return String(v==null?"":v).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));}
+function records(){try{return JSON.parse(localStorage.getItem(KEY)||"[]")}catch(e){return []}}
+const sn=new URLSearchParams(location.search).get("sn")||"";
+const rec=records().find(x=>String(x.serial)===sn)||(sn===demo.serial?demo:null);
+const el=document.getElementById("content");
+if(!rec){el.innerHTML='<div class="notfound">Certificate not found for Serial No: '+esc(sn||"(not specified)")+'</div>';}
+else if(rec.docImage){el.innerHTML='<img class="uploaded" src="'+esc(rec.docImage)+'" alt="Uploaded certificate">';}
+else {
+ const rows=[['Serial No',rec.serial],['Date',rec.date],['Place of Issue',rec.place],['Exporter',rec.exporter],['Importer',rec.importer],['Commodity',rec.commodity],['Quantity',rec.quantity],['Country of Origin',rec.origin],['Destination',rec.destination],['Status',rec.status]]
+ .filter(([k,v])=>v).map(([k,v])=>'<div class="row"><div class="label">'+esc(k)+'</div><div class="value">'+esc(v)+'</div></div>').join('');
+ el.innerHTML='<header class="masthead"><img src="logo.png" alt="Organization logo"><div class="fa">سازمان حفظ نباتات کشور</div><div class="en">Plant Protection Organization</div></header><div class="title">PHYTOSANITARY CERTIFICATE</div><div class="subtitle">Certificate of Plant Health</div><section class="details">'+rows+'</section><div class="seal">PLANT HEALTH<br>OFFICIAL CERTIFICATE</div>';
+}
+</script>
+</body>
+</html>

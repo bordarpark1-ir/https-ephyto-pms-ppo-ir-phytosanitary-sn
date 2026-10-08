@@ -1,32 +1,181 @@
 <!doctype html>
-<html lang="fa" dir="rtl"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>پنل مدیریت گواهی‌ها</title>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Admin Panel</title>
 <style>
-*{box-sizing:border-box}body{font-family:Tahoma,Arial,sans-serif;background:#f0f4f8;margin:0;padding:20px;color:#263238}.wrap{max-width:1000px;margin:auto}.box{background:white;border-radius:12px;padding:22px;margin-bottom:20px;box-shadow:0 3px 14px #0001}h1,h2{color:#176b36;margin:0 0 18px}h1{font-size:22px}.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:13px}.grid label{display:block;font-size:14px;font-weight:bold;margin-bottom:6px}.grid input,.grid select{width:100%;padding:11px;border:1px solid #c8d0d4;border-radius:7px;font-size:15px}.upload{grid-column:1/-1;border:1px dashed #31a65a;background:#f8fff9;padding:14px;border-radius:8px}.upload input{border:0;padding:7px}.preview{display:none;max-width:150px;max-height:90px;object-fit:contain;margin:10px auto 0;border:1px solid #ddd}.actions{display:flex;gap:9px;margin-top:16px;flex-wrap:wrap}button{border:0;border-radius:6px;padding:10px 15px;color:#fff;background:#29964d;cursor:pointer;font-size:14px}button:hover{filter:brightness(.92)}.secondary{background:#68757d}.qr{background:#0288d1}.del{background:#d7433e}.table-wrap{overflow:auto}table{width:100%;border-collapse:collapse;min-width:650px}th,td{border:1px solid #e0e5e8;padding:9px;text-align:center;font-size:13px}th{background:#e8f5e9;color:#256b39}.thumb{max-width:75px;max-height:50px;object-fit:contain}.modal{display:none;position:fixed;inset:0;background:#0009;align-items:center;justify-content:center;padding:15px;z-index:5}.modalbox{background:white;border-radius:12px;padding:22px;text-align:center;width:min(360px,100%)}.modalbox img{width:240px;height:240px;object-fit:contain;margin:12px}.hint{color:#59666c;font-size:13px;line-height:1.7}@media(max-width:650px){.grid{grid-template-columns:1fr}.upload{grid-column:auto}.box{padding:16px}}
-</style></head><body><div class="wrap">
-<section class="box"><h1>ثبت و ویرایش گواهی</h1><p class="hint">برای هر گواهی فقط تاریخ، محل صدور و شماره سریال ثبت می‌شود. تصویر سند اختیاری است.</p>
-<form id="form"><div class="grid">
-<div><label for="date">تاریخ (Date)</label><input id="date" required placeholder="مثلاً 09/06/2026"></div>
-<div><label for="place">محل صدور (Place of Issue)</label><select id="place" required></select></div>
-<div><label for="serial">شماره سریال (Serial No)</label><input id="serial" required placeholder="مثلاً 053554502"></div>
-<div class="upload"><label for="docImage">آپلود عکس سند گواهی (فقط تصویر)</label><input id="docImage" type="file" accept="image/*"><input id="imageData" type="hidden"><img id="preview" class="preview" alt="پیش‌نمایش تصویر"></div>
-</div><div class="actions"><button type="submit">ذخیره گواهی</button><button type="button" class="secondary" id="clear">فرم جدید</button></div></form></section>
-<section class="box"><h2>گواهی‌های ثبت‌شده</h2><div class="table-wrap"><table><thead><tr><th>شماره سریال</th><th>تاریخ</th><th>محل صدور</th><th>تصویر سند</th><th>عملیات</th></tr></thead><tbody id="tbody"></tbody></table></div></section>
-</div><div id="modal" class="modal"><div class="modalbox"><h3>کد QR گواهی</h3><p id="qrserial"></p><img id="qrimg" alt="QR Code"><p class="hint">اسکن کد، صفحه اصلی را با همین سه مشخصه باز می‌کند.</p><button class="secondary" id="close">بستن</button></div></div>
+body{font-family:Arial,Tahoma,sans-serif;background:#f3f5f4;margin:0;color:#222}
+.bar{background:#087d3a;color:#fff;padding:18px 24px;font-size:21px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px}
+.bar a{color:#fff;text-decoration:none;background:rgba(255,255,255,.15);padding:8px 14px;border-radius:6px;font-size:16px}
+.bar a:hover{background:rgba(255,255,255,.3)}
+.wrap{max-width:1000px;margin:22px auto;padding:0 14px}
+.box{background:#fff;border-radius:10px;padding:20px;margin-bottom:18px;box-shadow:0 2px 8px rgba(0,0,0,.12)}
+h2{margin-top:0;font-size:20px;color:#087d3a}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.grid input,.grid select{padding:12px;border:1px solid #ccc;border-radius:7px;font-size:16px;width:100%}
+.file-wrap{grid-column:1/-1}
+.file-wrap input{padding:8px}
+.actions{margin-top:15px;display:flex;gap:8px;flex-wrap:wrap}
+button{border:0;border-radius:7px;padding:11px 18px;background:#43a047;color:#fff;cursor:pointer;font-size:15px}
+button:hover{background:#388e3c}
+button.del{background:#b72c2c}
+button.ghost{background:#607d8b}
+table{width:100%;border-collapse:collapse}
+th,td{padding:10px;border-bottom:1px solid #ddd;text-align:right;font-size:14px}
+th{background:#eef4ef}
+.thumb{width:54px;height:54px;object-fit:cover;border-radius:5px;border:1px solid #ccc;cursor:pointer}
+.small{font-size:12px;color:#777}
+@media(max-width:650px){.grid{grid-template-columns:1fr}.box{overflow:auto}}
+</style>
+</head>
+<body>
+<div class="bar">
+  <span>پنل مدیریت گواهی‌های بهداشت گیاهی</span>
+  <a href="index.html">بازگشت به صفحه جستجو</a>
+</div>
+<div class="wrap">
+
+<div class="box">
+  <h2>افزودن / ویرایش گواهی</h2>
+  <div class="grid">
+    <input id="serial" placeholder="شماره سریال (Serial No) *">
+    <input id="date" placeholder="تاریخ (Date) e.g. 2026-06-09">
+    <select id="place">
+      <option value="">-- محل صدور (Place of Issue) --</option>
+      <option>Sistan and Baluchestan</option><option>Tehran</option><option>Razavi Khorasan</option>
+      <option>Khuzestan</option><option>Bushehr</option><option>Hormozgan</option>
+      <option>Astara</option><option>Bazargan</option><option>Bandar Abbas</option>
+      <option>Jolfa</option><option>Sarakhs</option><option>Bandar Anzali</option>
+    </select>
+    <input id="commodity" placeholder="کالا (Commodity)">
+    <input id="exporter" placeholder="فرستنده (Exporter)">
+    <input id="importer" placeholder="گیرنده (Importer)">
+    <input id="quantity" placeholder="مقدار (Quantity)">
+    <input id="origin" placeholder="مبدأ (Origin)">
+    <input id="destination" placeholder="مقصد (Destination)">
+    <input id="status" placeholder="وضعیت (Status)">
+    <div class="file-wrap">
+      <label>تصویر گواهی (اختیاری — به Base64 تبدیل می‌شود):</label>
+      <input type="file" id="docImage" accept="image/*">
+      <div class="small" id="imgInfo"></div>
+    </div>
+  </div>
+  <div class="actions">
+    <button onclick="save()">ذخیره و تولید QR</button>
+    <button class="ghost" onclick="clearForm()">پاک کردن فرم</button>
+  </div>
+</div>
+
+<div class="box" id="qrBox" style="display:none">
+  <h2>QR Code گواهی</h2>
+  <div style="display:flex;gap:16px;align-items:center;flex-wrap:wrap">
+    <img id="qrImg" alt="QR" style="width:180px;height:180px;border:1px solid #ddd;border-radius:8px">
+    <div>
+      <div id="qrUrl" class="small" style="margin-bottom:10px"></div>
+      <button onclick="downloadQR()">دانلود QR</button>
+      <button class="ghost" onclick="viewQR()">مشاهده QR</button>
+      <button class="ghost" onclick="document.getElementById('qrBox').style.display='none'">بستن</button>
+    </div>
+  </div>
+</div>
+
+<div class="box">
+  <h2>لیست گواهی‌ها</h2>
+  <table>
+    <thead><tr><th>تصویر</th><th>سریال</th><th>تاریخ</th><th>محل صدور</th><th>کالا</th><th>عملیات</th></tr></thead>
+    <tbody id="tbody"></tbody>
+  </table>
+</div>
+
+</div>
 <script>
-const KEY='phyto_demo_records_v2';
-const places=['Alborz','Ardabil','Bushehr','Chaharmahal and Bakhtiari','East Azerbaijan','Fars','Gilan','Golestan','Hamadan','Hormozgan','Ilam','Isfahan','Kerman','Kermanshah','Khuzestan','Kohgiluyeh and Boyer-Ahmad','Kurdistan','Lorestan','Markazi','Mazandaran','North Khorasan','Qazvin','Qom','Razavi Khorasan','Semnan','Sistan and Baluchestan','South Khorasan','Tehran','West Azerbaijan','Yazd','Zanjan'];
-const placeSelect=document.getElementById('place'); places.forEach(p=>{const o=document.createElement('option');o.value=p;o.textContent=p;placeSelect.appendChild(o)});
-const get=()=>{try{const x=JSON.parse(localStorage.getItem(KEY)||'[]');return Array.isArray(x)?x:[]}catch(e){return []}};
-function saveList(x){localStorage.setItem(KEY,JSON.stringify(x));render()}
-function safe(s){return String(s||'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
-function clearForm(){document.getElementById('form').reset();document.getElementById('imageData').value='';const im=document.getElementById('preview');im.src='';im.style.display='none';document.getElementById('serial').dataset.editing=''}
-document.getElementById('clear').onclick=clearForm;
-document.getElementById('docImage').addEventListener('change',e=>{const f=e.target.files[0];if(!f)return;if(!f.type.startsWith('image/')){alert('لطفاً فقط فایل تصویری انتخاب کنید.');e.target.value='';return}if(f.size>3*1024*1024){alert('حجم تصویر باید کمتر از ۳ مگابایت باشد.');e.target.value='';return}const r=new FileReader();r.onload=()=>{document.getElementById('imageData').value=r.result;const im=document.getElementById('preview');im.src=r.result;im.style.display='block'};r.readAsDataURL(f)});
-document.getElementById('form').addEventListener('submit',e=>{e.preventDefault();const serial=document.getElementById('serial').value.trim(),date=document.getElementById('date').value.trim(),place=document.getElementById('place').value,image=document.getElementById('imageData').value;const arr=get(),editing=document.getElementById('serial').dataset.editing;const prior=arr.find(x=>x.serial===editing||x.serial===serial);const rec={...(prior||{}),serial,date,place,image:image||((prior&&prior.image)||'')};const i=arr.findIndex(x=>x.serial===editing||x.serial===serial);if(i>=0)arr[i]=rec;else arr.unshift(rec);try{saveList(arr);clearForm();alert('گواهی ذخیره شد.')}catch(err){alert('ذخیره ناموفق بود؛ حجم تصویر را کاهش دهید.')}});
-function edit(s){const r=get().find(x=>x.serial===s);if(!r)return;document.getElementById('serial').value=r.serial;document.getElementById('serial').dataset.editing=r.serial;document.getElementById('date').value=r.date||'';document.getElementById('place').value=r.place||places[0];document.getElementById('imageData').value=r.image||'';const im=document.getElementById('preview');im.src=r.image||'';im.style.display=r.image?'block':'none';scrollTo({top:0,behavior:'smooth'})}
-function removeRec(s){if(confirm('این گواهی حذف شود؟'))saveList(get().filter(x=>x.serial!==s))}
-function showQR(s){const r=get().find(x=>x.serial===s);if(!r)return;const url=new URL('index.html',location.href);url.searchParams.set('sn',r.serial);url.searchParams.set('date',r.date);url.searchParams.set('place',r.place);document.getElementById('qrserial').textContent=r.serial;document.getElementById('qrimg').src='https://quickchart.io/qr?text='+encodeURIComponent(url.href)+'&size=300&margin=1';document.getElementById('modal').style.display='flex'}
-function render(){const body=document.getElementById('tbody'),arr=get();if(!arr.length){body.innerHTML='<tr><td colspan="5">هنوز گواهی ثبت نشده است.</td></tr>';return}body.innerHTML=arr.map(r=>`<tr><td><b>${safe(r.serial)}</b></td><td>${safe(r.date)}</td><td>${safe(r.place)}</td><td>${r.image?`<img class="thumb" src="${r.image}" alt="تصویر سند">`:'بدون عکس'}</td><td><button data-action="edit" data-id="${safe(r.serial)}">ویرایش</button> <button class="qr" data-action="qr" data-id="${safe(r.serial)}">ساخت QR</button> <button class="del" data-action="del" data-id="${safe(r.serial)}">حذف</button></td></tr>`).join('')}
-document.getElementById('tbody').addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;const s=b.dataset.id;if(b.dataset.action==='edit')edit(s);else if(b.dataset.action==='qr')showQR(s);else if(b.dataset.action==='del')removeRec(s)});
-document.getElementById('close').onclick=()=>document.getElementById('modal').style.display='none';document.getElementById('modal').addEventListener('click',e=>{if(e.target.id==='modal')e.currentTarget.style.display='none'});render();
-</script></body></html>
+const KEY = "phyto_demo_records_v2";
+let currentQR = { url: "", serial: "" };
+
+function get() {
+  try { return JSON.parse(localStorage.getItem(KEY) || "[]"); }
+  catch (e) { return []; }
+}
+function set(a) { localStorage.setItem(KEY, JSON.stringify(a)); render(); }
+
+function save() {
+  const o = {};
+  ["serial","date","place","commodity","exporter","importer","quantity","origin","destination","status"]
+    .forEach(f => o[f] = document.getElementById(f).value.trim());
+  if (!o.serial) return alert("شماره سریال الزامی است");
+  const f = document.getElementById("docImage").files[0];
+  const finish = () => {
+    const a = get();
+    const i = a.findIndex(x => x.serial === o.serial);
+    if (i >= 0) a[i] = Object.assign(a[i], o); else a.unshift(o);
+    set(a);
+    clearForm();
+    makeQR(o.serial, o.date, o.place);
+    alert("ذخیره شد");
+  };
+  if (f) {
+    const rd = new FileReader();
+    rd.onload = e => { o.docImage = e.target.result; finish(); };
+    rd.readAsDataURL(f);
+  } else finish();
+}
+
+function makeQR(serial, date, place) {
+  const base = location.origin + location.pathname.replace("admin.html", "index.html");
+  const url = base + "?sn=" + encodeURIComponent(serial) +
+              (date ? "&date=" + encodeURIComponent(date) : "") +
+              (place ? "&place=" + encodeURIComponent(place) : "");
+  currentQR = { url: url, serial: serial };
+  document.getElementById("qrImg").src =
+    "https://quickchart.io/qr?size=300&margin=1&text=" + encodeURIComponent(url);
+  document.getElementById("qrUrl").textContent = url;
+  document.getElementById("qrBox").style.display = "block";
+  document.getElementById("qrBox").scrollIntoView({ behavior: "smooth" });
+}
+function downloadQR() {
+  const a = document.createElement("a");
+  a.href = document.getElementById("qrImg").src;
+  a.download = "qr_" + currentQR.serial + ".png";
+  a.click();
+}
+function viewQR() { window.open(document.getElementById("qrImg").src, "_blank"); }
+function previewDoc(s) { window.open("document.html?sn=" + encodeURIComponent(s), "_blank"); }
+
+function edit(s) {
+  const o = get().find(x => x.serial === s); if (!o) return;
+  ["serial","date","place","commodity","exporter","importer","quantity","origin","destination","status"]
+    .forEach(f => document.getElementById(f).value = o[f] || "");
+  document.getElementById("imgInfo").textContent = o.docImage ? "تصویر موجود است (برای تغییر، فایل جدید انتخاب کنید)" : "";
+  scrollTo(0, 0);
+}
+function del(s) { if (confirm("این گواهی حذف شود؟")) set(get().filter(x => x.serial !== s)); }
+function clearForm() {
+  ["serial","date","commodity","exporter","importer","quantity","origin","destination","status"]
+    .forEach(f => document.getElementById(f).value = "");
+  document.getElementById("place").value = "";
+  document.getElementById("docImage").value = "";
+  document.getElementById("imgInfo").textContent = "";
+}
+document.getElementById("docImage").addEventListener("change", e => {
+  const f = e.target.files[0];
+  document.getElementById("imgInfo").textContent = f ? (f.name + " (" + Math.round(f.size/1024) + " KB)") : "";
+});
+
+function render() {
+  document.getElementById("tbody").innerHTML = get().map(x =>
+    '<tr>' +
+    '<td>' + (x.docImage ? '<img class="thumb" src="' + x.docImage + '" onclick="previewDoc(\'' + x.serial + '\')">' : '<span class="small">—</span>') + '</td>' +
+    '<td>' + x.serial + '</td><td>' + (x.date || "") + '</td><td>' + (x.place || "") + '</td><td>' + (x.commodity || "") + '</td>' +
+    '<td>' +
+    '<button onclick="edit(\'' + x.serial + '\')">ویرایش</button> ' +
+    '<button class="ghost" onclick="makeQR(\'' + x.serial + '\',\'' + (x.date || "") + '\',\'' + (x.place || "") + '\')">QR</button> ' +
+    '<button class="ghost" onclick="previewDoc(\'' + x.serial + '\')">پیش‌نمایش</button> ' +
+    '<button class="del" onclick="del(\'' + x.serial + '\')">حذف</button>' +
+    '</td></tr>'
+  ).join("") || '<tr><td colspan="6" class="small">موردی ثبت نشده است</td></tr>';
+}
+render();
+</script>
+</body>
+</html>
