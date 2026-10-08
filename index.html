@@ -217,7 +217,7 @@ select {
 
 <header class="header">
   <div class="logo-box">
-    <img src="logo.png" alt="سازمان حفظ نباتات کشور">
+    <img src="logo.png" alt="سازمان حفظ نباتات کشور" onerror="this.src='photo_1791492551081.webp'">
   </div>
   <div class="header-text">
     <div class="brand-fa">سازمان حفظ نباتات کشور</div>
@@ -313,23 +313,17 @@ const defaultRecords = [
 ];
 
 function getRecords() {
-  // The site is static: always retain a working demo record even when storage is
-  // empty, blocked (for example in some file:// contexts), or contains old data.
-  let stored = [];
-  try {
-    const raw = localStorage.getItem(KEY);
-    const parsed = raw ? JSON.parse(raw) : [];
-    if (Array.isArray(parsed)) stored = parsed;
-  } catch (e) { /* localStorage may be unavailable; use built-in data */ }
-  const records = [...defaultRecords];
-  for (const item of stored) {
-    if (!item || !item.serial) continue;
-    const i = records.findIndex(r => String(r.serial) === String(item.serial));
-    if (i >= 0) records[i] = { ...records[i], ...item };
-    else records.push(item);
+  const raw = localStorage.getItem(KEY);
+  if (!raw) {
+    localStorage.setItem(KEY, JSON.stringify(defaultRecords));
+    return defaultRecords;
   }
-  try { localStorage.setItem(KEY, JSON.stringify(records)); } catch (e) { /* read-only fallback */ }
-  return records;
+  try {
+    const parsed = JSON.parse(raw);
+    return Array.isArray(parsed) && parsed.length > 0 ? parsed : defaultRecords;
+  } catch (e) {
+    return defaultRecords;
+  }
 }
 
 function searchCertificate() {
@@ -338,14 +332,14 @@ function searchCertificate() {
   const place = document.getElementById("place").value.trim();
 
   const records = getRecords();
-  const found = records.find(r => r.serial === serial);
+  const found = records.find(r => r.serial === serial && r.date === date && r.place === place);
 
   const res = document.getElementById("result");
   if (found) {
     res.innerHTML = `Certificate exists. <a onclick="viewDocument('${found.serial}')">(view document)</a>`;
     res.style.color = "#222";
   } else {
-    res.innerHTML = `<span style="color:#b30000;">No certificate found for Serial No: ${serial || "empty"}</span>`;
+    res.innerHTML = `<span style="color:#b30000;">No certificate found for these details (Serial No: ${serial || "empty"})</span>`;
   }
 }
 
@@ -354,8 +348,21 @@ function viewDocument(optSerial) {
   location.href = "document.html?sn=" + encodeURIComponent(serial);
 }
 
-// Initialize safely; the page and built-in certificate work even if storage is blocked.
-getRecords();
+// Initialize default data if empty
+if (!localStorage.getItem(KEY)) {
+  localStorage.setItem(KEY, JSON.stringify(defaultRecords));
+}
+</script>
+
+<script>
+window.addEventListener("DOMContentLoaded", () => {
+  const p = new URLSearchParams(location.search);
+  const sn = p.get("sn"), date = p.get("date"), place = p.get("place");
+  if (sn !== null) document.getElementById("serial").value = sn;
+  if (date !== null) document.getElementById("date").value = date;
+  if (place !== null) document.getElementById("place").value = place;
+  if (sn) searchCertificate();
+});
 </script>
 </body>
 </html>
