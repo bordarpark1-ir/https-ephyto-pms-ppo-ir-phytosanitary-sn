@@ -1,186 +1,250 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-<title>Phytosanitary Certificate Search</title>
-<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&family=Roboto+Mono&display=swap" rel="stylesheet">
-<style>
-*{box-sizing:border-box;margin:0;padding:0}
-html,body{min-height:100%;font-family:Roboto,-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif;color:#222}
-body{background:#093c1b url('bg.jpg') no-repeat center top fixed;background-size:cover;min-height:100vh;display:flex;flex-direction:column;align-items:center;padding:0 0 40px}
-.header{width:100%;max-width:580px;padding:38px 24px 24px;display:flex;align-items:center;gap:22px}
-.logo-box{width:135px;height:135px;flex-shrink:0;border-radius:50%;background:#fff;border:4px solid rgba(255,255,255,.9);box-shadow:0 2px 10px rgba(0,0,0,.35);display:flex;align-items:center;justify-content:center;overflow:hidden;cursor:pointer;transition:transform .15s}
-.logo-box:hover{transform:scale(1.04)}
-.logo-box img{width:100%;height:100%;object-fit:cover;cursor:pointer}
-.header-text{color:#fff;text-shadow:0 2px 6px rgba(0,0,0,.7)}
-.brand-fa{font-size:26px;font-weight:700;line-height:1.25;margin-bottom:8px;direction:rtl;text-align:left}
-.brand-en{font-size:25px;font-weight:700;line-height:1.18}
-.card{width:calc(100% - 36px);max-width:540px;background:#f4f4f4;border-radius:8px;box-shadow:0 4px 18px rgba(0,0,0,.3);overflow:hidden}
-.card-body{padding:38px 36px 32px}
-h1{font-size:38px;line-height:1.15;color:#262626;font-weight:700;letter-spacing:-.5px;margin-bottom:40px}
-.form-group{margin-bottom:26px}
-label{display:block;font-size:24px;font-weight:500;color:#222;margin-bottom:8px}
-input,select{width:100%;height:56px;border:2px solid #cecece;border-radius:6px;background:#fff;padding:0 16px;font-size:22px;color:#333;font-family:inherit;outline:none;transition:border-color .2s}
-input:focus,select:focus{border-color:#43a047}
-select{cursor:pointer;appearance:auto}
-.btn-search{width:100%;height:60px;border:0;border-radius:6px;background:#43a047;color:#fff;font-size:24px;font-weight:600;font-family:inherit;cursor:pointer;margin-top:10px;box-shadow:0 2px 6px rgba(0,0,0,.15);transition:background .2s}
-.btn-search:hover{background:#4CAF50}
-.result-box{border-top:2px solid #8e8e8e;padding:28px 36px 36px;background:#f4f4f4;font-family:"Roboto Mono",monospace;font-size:20px;color:#222;min-height:80px;display:flex;align-items:center;flex-wrap:wrap}
-.result-box a{color:#0000ee;text-decoration:underline;cursor:pointer;margin-left:6px}
-.result-box a:hover{color:#0000aa}
-@media(max-width:480px){.header{padding:28px 18px 20px;gap:16px}.logo-box{width:110px;height:110px}.brand-fa{font-size:22px;margin-bottom:6px}.brand-en{font-size:21px}.card{width:calc(100% - 24px)}.card-body{padding:28px 22px 24px}h1{font-size:32px;margin-bottom:30px}label{font-size:21px}input,select{height:50px;font-size:19px}.btn-search{height:54px;font-size:22px}.result-box{padding:22px;font-size:18px}}
-</style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light">
+  <title>Phytosanitary Certificate Search</title>
+  <style>
+    :root { color-scheme: light; }
+    * { box-sizing: border-box; }
+    html { background-color: #1a5c2a; }
+    body {
+      color-scheme: light;
+      background: #1a5c2a url('bg.jpg') center/cover no-repeat fixed;
+      background-color: #fff;
+      color: #212121;
+      min-height: 100vh;
+      margin: 0;
+      font-family: 'Segoe UI', Tahoma, Arial, sans-serif;
+    }
+    header {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      padding: 14px 16px;
+      background-color: transparent;
+      gap: 12px;
+    }
+    .logo {
+      display: block;
+      width: 56px;
+      height: 56px;
+      flex: 0 0 56px;
+      border-radius: 50%;
+      cursor: pointer;
+      object-fit: cover;
+    }
+    .brand { direction: rtl; text-align: right; }
+    .brand-fa {
+      color: #fff;
+      font-size: 17px;
+      font-weight: bold;
+      line-height: 1.35;
+      white-space: nowrap;
+      text-shadow: 0 1px 3px rgba(0,0,0,.5);
+    }
+    .brand-en {
+      color: #fff;
+      font-size: 14px;
+      font-weight: bold;
+      line-height: 1.35;
+      white-space: nowrap;
+      text-align: right;
+      text-shadow: 0 1px 3px rgba(0,0,0,.5);
+    }
+    .card {
+      width: 88%;
+      max-width: 340px;
+      margin: 15px auto 30px;
+      box-sizing: border-box;
+      background: #ffffff;
+      border-radius: 8px;
+      padding: 20px 22px;
+      box-shadow: 0 4px 14px rgba(0,0,0,0.18);
+    }
+    h1 {
+      font-size: 21px;
+      font-weight: 700;
+      color: #1a1a1a;
+      line-height: 1.25;
+      margin: 0 0 16px 0;
+    }
+    label {
+      font-size: 14px;
+      font-weight: 500;
+      color: #222;
+      margin-bottom: 5px;
+      display: block;
+    }
+    input, select {
+      display: block;
+      width: 100%;
+      height: 42px;
+      font-size: 14px;
+      color: #333;
+      background: #fff;
+      border: 1px solid #bcbcbc;
+      border-radius: 6px;
+      padding: 0 10px;
+      box-sizing: border-box;
+      margin-bottom: 14px;
+    }
+    input::placeholder { color: #777; opacity: 1; }
+    button {
+      display: block;
+      width: 100%;
+      height: 40px;
+      background-color: #5da856;
+      color: #fff;
+      font-size: 15px;
+      font-weight: 600;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      margin-top: 6px;
+    }
+    #result {
+      border-top: 1px solid #ccc;
+      margin-top: 14px;
+      padding-top: 12px;
+      font-family: 'Courier New', monospace;
+      font-size: 13px;
+      color: #212121;
+      background-color: transparent;
+    }
+    #result[hidden] { display: none; }
+    #result a { color: #0645ad; text-decoration: underline; }
+    #result.not-found { color: #a00; }
+    @media (max-width: 380px) {
+      .card { padding-left: 18px; padding-right: 18px; }
+    }
+  </style>
 </head>
 <body>
+  <header>
+    <img class="logo" src="logo.png" alt="Logo" onclick="location.href='admin.html'">
+    <div class="brand" dir="rtl">
+      <div class="brand-fa">سازمان حفظ نباتات کشور</div>
+      <div class="brand-en" dir="ltr">Plant Protection Organization</div>
+    </div>
+  </header>
 
-<header class="header">
-  <div class="logo-box" title="Admin" onclick="location.href='admin.html'">
-    <img src="logo.png" alt="Logo" onclick="location.href='admin.html'">
-  </div>
-  <div class="header-text">
-    <div class="brand-fa">سامانه گواهی بهداشت گیاهی</div>
-    <div class="brand-en">Plant Protection Organization</div>
-  </div>
-</header>
-
-<main class="card">
-  <section class="card-body">
+  <main class="card">
     <h1>Phytosanitary Certificate Search</h1>
-
-    <div class="form-group">
+    <form id="searchForm">
       <label for="date">Date</label>
-      <input type="text" id="date" placeholder="YYYY-MM-DD">
-    </div>
+      <input id="date" name="date" type="text" placeholder="09/06/2026" autocomplete="off">
 
-    <div class="form-group">
       <label for="place">Place of Issue</label>
-      <select id="place" onchange="if(this.value==='__other__'){document.getElementById('placeText').style.display='block';document.getElementById('placeText').focus()}else{document.getElementById('placeText').style.display='none'}">
-        <option value="" selected>-- Select Place of Issue --</option>
-        <option>Sistan and Baluchestan</option>
-        <option>Tehran</option>
-        <option>Razavi Khorasan</option>
-        <option>Khuzestan</option>
-        <option>Bushehr</option>
-        <option>Hormozgan</option>
-        <option>Astara</option>
-        <option>Bazargan</option>
-        <option>Bandar Abbas</option>
-        <option>Jolfa</option>
-        <option>Sarakhs</option>
-        <option>Tabriz</option>
-        <option>Mashhad</option>
-        <option>Ahvaz</option>
-        <option>Shiraz</option>
-        <option>Bandar Anzali</option>
-        <option>Isfahan</option>
-        <option>Kerman</option>
-        <option>Gilan</option>
-        <option>Golestan</option>
-        <option value="__other__">Other (type below)…</option>
+      <select id="place" name="place">
+        <option value="Sistan and Baluchestan" selected>Sistan and Baluchestan</option>
+        <option value="Tehran">Tehran</option>
+        <option value="Khorasan Razavi">Khorasan Razavi</option>
+        <option value="Khuzestan">Khuzestan</option>
+        <option value="Bushehr">Bushehr</option>
+        <option value="Hormozgan">Hormozgan</option>
+        <option value="Gilan">Gilan</option>
+        <option value="Ardabil">Ardabil</option>
+        <option value="West Azerbaijan">West Azerbaijan</option>
+        <option value="East Azerbaijan">East Azerbaijan</option>
+        <option value="Kerman">Kerman</option>
+        <option value="Yazd">Yazd</option>
+        <option value="Isfahan">Isfahan</option>
+        <option value="Fars">Fars</option>
+        <option value="Astara">Astara</option>
+        <option value="Bazargan">Bazargan</option>
+        <option value="Bandar Abbas">Bandar Abbas</option>
+        <option value="Jolfa">Jolfa</option>
+        <option value="Sarakhs">Sarakhs</option>
+        <option value="Milak">Milak</option>
+        <option value="Bashmagh">Bashmagh</option>
+        <option value="Chabahar">Chabahar</option>
+        <option value="Other">Other</option>
       </select>
-      <input type="text" id="placeText" placeholder="Type custom place of issue" style="display:none;margin-top:10px">
-    </div>
 
-    <div class="form-group">
-      <label for="serial">Serial No</label>
-      <input type="text" id="serial" inputmode="numeric" placeholder="Enter Serial No">
-    </div>
+      <label for="sn">Serial No</label>
+      <input id="sn" name="sn" type="text" inputmode="numeric" placeholder="053554502" autocomplete="off">
 
-    <button type="button" class="btn-search" onclick="searchCertificate()">Search</button>
-  </section>
+      <button type="submit">Search</button>
+    </form>
+    <div id="result" hidden></div>
+  </main>
 
-  <section class="result-box" id="result"></section>
-</main>
+  <script>
+    (function () {
+      'use strict';
+      const STORAGE_KEY = 'phyto_demo_records_v2';
+      const form = document.getElementById('searchForm');
+      const dateInput = document.getElementById('date');
+      const placeInput = document.getElementById('place');
+      const serialInput = document.getElementById('sn');
+      const result = document.getElementById('result');
+      let records = [];
 
-<script>
-const KEY = "phyto_demo_records_v2";
+      try {
+        const saved = localStorage.getItem(STORAGE_KEY);
+        if (saved === null) {
+          localStorage.setItem(STORAGE_KEY, JSON.stringify([]));
+        } else {
+          const parsed = JSON.parse(saved);
+          if (Array.isArray(parsed)) records = parsed;
+        }
+      } catch (error) {
+        records = [];
+      }
 
-const defaultRecord = {
-  serial: "053554502",
-  date: "2026-06-09",
-  place: "Sistan and Baluchestan",
-  exporter: "Persian Gulf Export Co.",
-  importer: "Global Agri Trade Ltd.",
-  commodity: "Fresh Apples (Malus domestica)",
-  quantity: "24,500",
-  unit: "KG (Kilograms)",
-  origin: "Iran (Islamic Republic of)",
-  destination: "India",
-  transport: "Maritime / Sea Freight",
-  treatment: "Cold Treatment at 0\u00b0C for 14 days",
-  officer: "M. Hosseini (Senior Quarantine Officer)",
-  status: "APPROVED & ISSUED",
-  botanicalName: "Malus domestica",
-  distinguishingMarks: "Batch #EXP-2026-908"
-};
+      const params = new URLSearchParams(window.location.search);
+      if (params.has('sn')) serialInput.value = params.get('sn');
+      if (params.has('date')) dateInput.value = params.get('date');
+      if (params.has('place')) {
+        const requestedPlace = params.get('place');
+        const matchingOption = Array.from(placeInput.options).find(
+          option => option.value.toLowerCase() === requestedPlace.toLowerCase()
+        );
+        if (matchingOption) placeInput.value = matchingOption.value;
+      }
 
-function getRecords() {
-  const raw = localStorage.getItem(KEY);
-  if (!raw) { localStorage.setItem(KEY, JSON.stringify([defaultRecord])); return [defaultRecord]; }
-  try {
-    const parsed = JSON.parse(raw);
-    return Array.isArray(parsed) && parsed.length > 0 ? parsed : [defaultRecord];
-  } catch (e) { return [defaultRecord]; }
-}
+      function showNotFound() {
+        result.textContent = 'Certificate not found.';
+        result.classList.add('not-found');
+        result.hidden = false;
+      }
 
-function getPlace() {
-  const sel = document.getElementById("place");
-  if (sel.value === "__other__") return document.getElementById("placeText").value.trim();
-  return sel.value.trim();
-}
+      function search() {
+        const sn = serialInput.value.trim();
+        const date = dateInput.value.trim();
+        const place = placeInput.value.trim();
+        if (!sn || !date || !place) {
+          window.alert('Please complete all fields.');
+          return;
+        }
 
-function showResult(rec) {
-  const res = document.getElementById("result");
-  res.innerHTML = 'Certificate exists. <a onclick="viewDocument(\'' + rec.serial + '\')">(view document)</a>';
-}
+        const match = records.find(record => record &&
+          String(record.sn == null ? '' : record.sn).trim().toLowerCase() === sn.toLowerCase() &&
+          String(record.date == null ? '' : record.date).trim() === date &&
+          String(record.place == null ? '' : record.place).trim().toLowerCase() === place.toLowerCase()
+        );
 
-function searchCertificate() {
-  const serial = document.getElementById("serial").value.trim();
-  const date = document.getElementById("date").value.trim();
-  const place = getPlace();
-  const res = document.getElementById("result");
-  if (!serial) { res.innerHTML = '<span style="color:#b30000">Please enter a Serial No.</span>'; return; }
-  const records = getRecords();
-  const found = records.find(r => r.serial === serial);
-  if (found) {
-    showResult(found);
-  } else {
-    res.innerHTML = '<span style="color:#b30000">No certificate found for Serial No: ' + serial + '</span>';
-  }
-}
+        result.replaceChildren();
+        result.classList.remove('not-found');
+        if (match) {
+          result.append(document.createTextNode('Certificate exists. '));
+          const link = document.createElement('a');
+          link.href = 'document.html?sn=' + encodeURIComponent(sn);
+          link.textContent = '(view document)';
+          result.append(link);
+          result.hidden = false;
+        } else {
+          showNotFound();
+        }
+      }
 
-function viewDocument(sn) {
-  location.href = "document.html?sn=" + encodeURIComponent(sn);
-}
-
-function setPlaceValue(val) {
-  const sel = document.getElementById("place");
-  const txt = document.getElementById("placeText");
-  let matched = false;
-  for (const o of sel.options) { if (o.value === val || o.text === val) { sel.value = o.value; matched = true; break; } }
-  if (matched && val !== "__other__") { txt.style.display = "none"; }
-  else { sel.value = "__other__"; txt.style.display = "block"; txt.value = val; }
-}
-
-// Auto-check URL parameters (sn, date, place) on load
-(function () {
-  const p = new URLSearchParams(location.search);
-  const sn = p.get("sn"), date = p.get("date"), place = p.get("place");
-  if (date) document.getElementById("date").value = date;
-  if (place) setPlaceValue(place);
-  if (sn) {
-    document.getElementById("serial").value = sn;
-    const rec = getRecords().find(r => r.serial === sn);
-    if (rec) {
-      if (rec.date && !date) document.getElementById("date").value = rec.date;
-      if (rec.place && !place) setPlaceValue(rec.place);
-      showResult(rec);
-    } else {
-      document.getElementById("result").innerHTML = '<span style="color:#b30000">No certificate found for Serial No: ' + sn.replace(/[&<>"\']/g, "") + '</span>';
-    }
-  }
-})();
-</script>
+      form.addEventListener('submit', function (event) {
+        event.preventDefault();
+        search();
+      });
+    }());
+  </script>
 </body>
 </html>
